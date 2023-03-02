@@ -12,6 +12,7 @@ public class DataRx {
     // It is always 0 unless result is `OK`.
     // The data type is int as it is the resulting data type when adding 2 shorts.
     private final int value;
+    //private final long value;
 
     // We can generate this DataClass from a result with the default value (used for anything that's not OK)
     public DataRx(Result result) {
@@ -21,6 +22,7 @@ public class DataRx {
 
     // We can also generate this DataClass from the resulting value, setting the result to OK.
     public DataRx(int value) {
+    //public DataRx(long value) {
         this.result = Result.OK;
         this.value = value;
     }
@@ -36,6 +38,7 @@ public class DataRx {
     }
 
     public int getValue() {
+    //public long getValue() {
         return this.value;
     }
 
@@ -46,6 +49,14 @@ public class DataRx {
             this.result.getOpr(),
             // But the resulting integer need to be converted to the bytes its composed bytes.
             // We do this with Big Endian, as that's what ByteBuffer needs.
+
+            // If this.value is `long`, uncomment this.
+            // The teacher server uses a long for the result rather than an integer.
+            //(byte) ((this.value >> 64) & 0xff),
+            //(byte) ((this.value >> 48) & 0xff),
+            //(byte) ((this.value >> 40) & 0xff),
+            //(byte) ((this.value >> 32) & 0xff),
+
             (byte) ((this.value >> 24) & 0xff),
             (byte) ((this.value >> 16) & 0xff),
             (byte) ((this.value >> 8) & 0xff),

@@ -5,6 +5,8 @@ import org.example.model.DataTx;
 import org.example.model.Operators;
 
 import java.io.IOException;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
@@ -40,25 +42,47 @@ public class Main {
         while (true) {
             // Ask for a number.
             // The exercise says the number should be 2 bytes, that means the data type should be short.
-            // TODO: This can fail if there's a bigger or smaller value than `short` MIN/MAX, but i don't have the time to fix it right now.
             System.out.print("Enter the first number (-32768 -> 32767): ");
-            short first = scanner.nextShort();
+            short first;
+            while (true) {
+                try {
+                    first = scanner.nextShort();
+                    break;
+                } catch (InputMismatchException ignored) {
+                    scanner.next();
+                    System.out.print("Invalid number!\nEnter the first number (-32768 -> 32767): ");
+                }
+            }
 
             System.out.print("Enter the operator [+ - * /]: ");
 
             char rawOperator;
-            do {
+            while (true) {
                 rawOperator = scanner.next().charAt(0);
+
                 // Get the operator character, while the inputted character is not a supported operator.
-            } while (Operators.matchSymbol(rawOperator) != Operators.UNKNOWN);
+                if (Operators.matchSymbol(rawOperator) == Operators.UNKNOWN) {
+                    System.out.print("Unsupported operator!\nEnter the operator [+ - * /]: ");
+                } else {
+                    break;
+                }
+            }
 
             // When it is valid, get the enumeration variant of that operator.
             Operators operator = Operators.matchSymbol(rawOperator);
 
             // Get the second numerical value.
-            // TODO: This can fail if there's a bigger or smaller value than `short` MIN/MAX, but i don't have the time to fix it right now.
             System.out.print("Enter the second number (-32768 -> 32767): ");
-            short second = scanner.nextShort();
+            short second;
+            while (true) {
+                try {
+                    second = scanner.nextShort();
+                    break;
+                } catch (InputMismatchException ignored) {
+                    scanner.next();
+                    System.out.print("Invalid number!\nEnter the second number (-32768 -> 32767): ");
+                }
+            }
 
             // Eat the newline from inputting the last number.
             scanner.nextLine();
